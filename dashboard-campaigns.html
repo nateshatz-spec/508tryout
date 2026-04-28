@@ -112,6 +112,37 @@
             .sidebar { display: none; } /* In a real app, this would be a toggle menu */
             .main-content { padding: 1.5rem; }
         }
+        
+        .campaign-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .leads-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .leads-table th {
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+            font-weight: 500;
+        }
+        .leads-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+        .leads-table tr:last-child td {
+            border-bottom: none;
+        }
+        .leads-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
     </style>
 </head>
 <body>
@@ -141,32 +172,77 @@
                 </div>
             </div>
 
-            <div class="metrics-grid fade-in-up delay-1">
-                <div class="metric-card">
-                    <div class="metric-title">Total Leads</div>
-                    <div class="metric-value">342</div>
-                    <div class="metric-trend trend-up">&uarr; 12% vs last month</div>
+            <div class="campaign-cards fade-in-up delay-1">
+                <div class="metric-card" style="border-left: 4px solid #0f96d8;">
+                    <div class="metric-title">Q4 B2B SaaS Outreach</div>
+                    <div class="metric-value" style="font-size: 1.5rem;">Active</div>
+                    <div class="metric-trend">24 Leads Generated</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-title">Website Traffic</div>
-                    <div class="metric-value">12.5k</div>
-                    <div class="metric-trend trend-up">&uarr; 8.4% vs last month</div>
+                <div class="metric-card" style="border-left: 4px solid #10b981;">
+                    <div class="metric-title">Local SEO Blast</div>
+                    <div class="metric-value" style="font-size: 1.5rem;">Active</div>
+                    <div class="metric-trend">18 Leads Generated</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-title">Conversion Rate</div>
-                    <div class="metric-value">2.7%</div>
-                    <div class="metric-trend trend-up">&uarr; 0.3% vs last month</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-title">Cost per Lead</div>
-                    <div class="metric-value">$42.50</div>
-                    <div class="metric-trend trend-down">&darr; 5% vs last month</div>
+                <div class="metric-card" style="border-left: 4px solid #94A3B8;">
+                    <div class="metric-title">Retargeting Ad Campaign</div>
+                    <div class="metric-value" style="font-size: 1.5rem;">Paused</div>
+                    <div class="metric-trend">12 Leads Generated</div>
                 </div>
             </div>
 
-            <div class="charts-area fade-in-up delay-2">
-                <h3 style="margin-bottom: 1.5rem;">Traffic & Lead Growth (YTD)</h3>
-                <canvas id="growthChart" height="100"></canvas>
+            <div class="charts-area fade-in-up delay-2" style="margin-top: 2.5rem; padding: 0; overflow-x: auto;">
+                <div style="padding: 1.5rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0;">Recent Campaign Leads</h3>
+                    <button class="btn-primary-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Export CSV</button>
+                </div>
+                <table class="leads-table">
+                    <thead>
+                        <tr>
+                            <th>Lead Name</th>
+                            <th>Company</th>
+                            <th>Campaign Source</th>
+                            <th>Status</th>
+                            <th>Date Captured</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Alex Mercer</strong><br><span style="font-size: 0.85rem; color: var(--text-secondary);">alex@techflow.io</span></td>
+                            <td>TechFlow Startups</td>
+                            <td><span class="badge" style="margin: 0; padding: 0.2rem 0.6rem; font-size: 0.75rem;">Q4 B2B SaaS</span></td>
+                            <td><span style="color: #0f96d8;">&#x25cf; New</span></td>
+                            <td>Oct 24, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Samantha Wright</strong><br><span style="font-size: 0.85rem; color: var(--text-secondary);">s.wright@acmecorp.com</span></td>
+                            <td>Acme Corp</td>
+                            <td><span class="badge" style="margin: 0; padding: 0.2rem 0.6rem; font-size: 0.75rem;">Retargeting Ads</span></td>
+                            <td><span style="color: #10b981;">&#x25cf; Contacted</span></td>
+                            <td>Oct 22, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marcus Johnson</strong><br><span style="font-size: 0.85rem; color: var(--text-secondary);">mjohnson@localretail.net</span></td>
+                            <td>Local Retail Co.</td>
+                            <td><span class="badge" style="margin: 0; padding: 0.2rem 0.6rem; font-size: 0.75rem;">Local SEO Blast</span></td>
+                            <td><span style="color: #f59e0b;">&#x25cf; In Progress</span></td>
+                            <td>Oct 20, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Priya Patel</strong><br><span style="font-size: 0.85rem; color: var(--text-secondary);">priya.p@innovate.health</span></td>
+                            <td>Innovate Health</td>
+                            <td><span class="badge" style="margin: 0; padding: 0.2rem 0.6rem; font-size: 0.75rem;">Q4 B2B SaaS</span></td>
+                            <td><span style="color: #0f96d8;">&#x25cf; New</span></td>
+                            <td>Oct 18, 2026</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tom Baker</strong><br><span style="font-size: 0.85rem; color: var(--text-secondary);">tom@bakerlogistics.com</span></td>
+                            <td>Baker Logistics</td>
+                            <td><span class="badge" style="margin: 0; padding: 0.2rem 0.6rem; font-size: 0.75rem;">Local SEO Blast</span></td>
+                            <td><span style="color: #10b981;">&#x25cf; Closed Won</span></td>
+                            <td>Oct 15, 2026</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </main>
     </div>
