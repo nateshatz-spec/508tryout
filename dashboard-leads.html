@@ -112,6 +112,45 @@
             .sidebar { display: none; } /* In a real app, this would be a toggle menu */
             .main-content { padding: 1.5rem; }
         }
+        
+        /* Gmail Lookalike UI */
+        .email-row {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: background 0.2s;
+            gap: 1rem;
+            color: var(--text-secondary);
+        }
+        .email-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom-color: transparent;
+        }
+        .email-row.unread {
+            color: var(--text-primary);
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .email-row .sender { width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .email-row .subject { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: normal; }
+        .email-row.unread .subject { font-weight: 600; }
+        .email-row .subject strong { color: var(--accent-color); font-weight: normal; }
+        .email-row .date { width: 80px; text-align: right; font-size: 0.85rem; }
+        .email-row .star { cursor: pointer; font-size: 1.2rem; line-height: 1; margin-top: -2px; }
+        
+        .inbox-toolbar {
+            padding: 0.8rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            align-items: center;
+        }
+        .inbox-toolbar span { cursor: pointer; transition: color 0.2s; }
+        .inbox-toolbar span:hover { color: var(--text-primary); }
     </style>
 </head>
 <body>
@@ -132,41 +171,83 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
-            <div class="top-bar fade-in-up">
-                <h2>Lead Inbox</h2>
+        <main class="main-content" style="padding: 0; display: flex; flex-direction: column; height: 100vh;">
+            <div class="top-bar fade-in-up" style="padding: 1rem 2rem; border-bottom: 1px solid var(--glass-border); margin-bottom: 0;">
+                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                    <h2 style="margin: 0; font-size: 1.5rem;">Lead Inbox</h2>
+                    <input type="text" placeholder="Search leads..." style="background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 0.6rem 1.2rem; border-radius: 8px; color: var(--text-primary); width: 400px; margin-left: 2rem; outline: none;">
+                </div>
                 <div class="user-profile">
-                    <span>Welcome back, Client</span>
                     <div class="avatar">C</div>
                 </div>
             </div>
 
-            <div class="metrics-grid fade-in-up delay-1">
-                <div class="metric-card">
-                    <div class="metric-title">Total Leads</div>
-                    <div class="metric-value">342</div>
-                    <div class="metric-trend trend-up">&uarr; 12% vs last month</div>
+            <div class="fade-in-up delay-1" style="display: flex; flex: 1; overflow: hidden;">
+                <!-- Inbox Sidebar -->
+                <div style="width: 220px; border-right: 1px solid var(--glass-border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.2rem; background: var(--bg-secondary);">
+                    <button class="btn-primary" style="margin-bottom: 1.5rem; width: 100%; border-radius: 12px; padding: 0.8rem; text-align: center; justify-content: center; display: flex; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 1.2rem;">+</span> Compose
+                    </button>
+                    <a href="#" style="padding: 0.6rem 1rem; border-radius: 6px; background: rgba(15, 150, 216, 0.1); color: var(--accent-color); font-weight: 500; display: flex; justify-content: space-between; align-items: center;">Inbox <span style="font-size:0.75rem; background: var(--accent-color); color: var(--bg-color); padding: 2px 8px; border-radius: 12px; font-weight: bold;">3</span></a>
+                    <a href="#" style="padding: 0.6rem 1rem; border-radius: 6px; color: var(--text-secondary);">Starred</a>
+                    <a href="#" style="padding: 0.6rem 1rem; border-radius: 6px; color: var(--text-secondary);">Snoozed</a>
+                    <a href="#" style="padding: 0.6rem 1rem; border-radius: 6px; color: var(--text-secondary);">Sent</a>
+                    <a href="#" style="padding: 0.6rem 1rem; border-radius: 6px; color: var(--text-secondary);">Trash</a>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-title">Website Traffic</div>
-                    <div class="metric-value">12.5k</div>
-                    <div class="metric-trend trend-up">&uarr; 8.4% vs last month</div>
+                
+                <!-- Email List -->
+                <div style="flex: 1; overflow-y: auto; background: var(--bg-color);">
+                    <!-- Toolbar -->
+                    <div class="inbox-toolbar">
+                        <input type="checkbox" style="cursor: pointer;">
+                        <span>&#x21bb;</span> <!-- Refresh -->
+                        <span>&#x22ee;</span> <!-- More -->
+                    </div>
+                    
+                    <!-- Emails -->
+                    <div class="email-row unread">
+                        <input type="checkbox">
+                        <span class="star">&#9734;</span>
+                        <span class="sender">Sarah Jenkins</span>
+                        <span class="subject"><strong>Website Redesign Inquiry</strong> - Hi there, we are looking to revamp our agency website...</span>
+                        <span class="date">10:42 AM</span>
+                    </div>
+                    <div class="email-row unread">
+                        <input type="checkbox">
+                        <span class="star">&#9734;</span>
+                        <span class="sender">Michael Chen</span>
+                        <span class="subject"><strong>SEO Services Quote</strong> - I found you via Google and I'm interested in your local SEO packages.</span>
+                        <span class="date">Yesterday</span>
+                    </div>
+                    <div class="email-row unread">
+                        <input type="checkbox">
+                        <span class="star" style="color: var(--accent-color);">&#9733;</span>
+                        <span class="sender">Acme Corp</span>
+                        <span class="subject"><strong>Partnership Opportunity</strong> - We love your creative design work and want to discuss a potential partnership.</span>
+                        <span class="date">Oct 12</span>
+                    </div>
+                    <div class="email-row">
+                        <input type="checkbox">
+                        <span class="star">&#9734;</span>
+                        <span class="sender">David Smith</span>
+                        <span class="subject"><strong>Following up on proposal</strong> - Thanks for the call yesterday. I have a few questions about the timeline.</span>
+                        <span class="date">Oct 10</span>
+                    </div>
+                    <div class="email-row">
+                        <input type="checkbox">
+                        <span class="star">&#9734;</span>
+                        <span class="sender">Elena Rodriguez</span>
+                        <span class="subject"><strong>New brand identity</strong> - Are you available to take on a new branding project starting next month?</span>
+                        <span class="date">Oct 05</span>
+                    </div>
+                    <div class="email-row">
+                        <input type="checkbox">
+                        <span class="star">&#9734;</span>
+                        <span class="sender">TechFlow Startups</span>
+                        <span class="subject"><strong>PPC Campaign Audit</strong> - We've been running ads for 6 months but our CPC is too high. Can you help?</span>
+                        <span class="date">Sep 28</span>
+                    </div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-title">Conversion Rate</div>
-                    <div class="metric-value">2.7%</div>
-                    <div class="metric-trend trend-up">&uarr; 0.3% vs last month</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-title">Cost per Lead</div>
-                    <div class="metric-value">$42.50</div>
-                    <div class="metric-trend trend-down">&darr; 5% vs last month</div>
-                </div>
-            </div>
-
-            <div class="charts-area fade-in-up delay-2">
-                <h3 style="margin-bottom: 1.5rem;">Traffic & Lead Growth (YTD)</h3>
-                <canvas id="growthChart" height="100"></canvas>
             </div>
         </main>
     </div>
