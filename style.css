@@ -366,6 +366,26 @@ a {
 
 .service-card p {
     color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.service-card.glass-panel {
+    display: block; /* Since it's an anchor tag now */
+}
+
+.learn-more {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    transition: var(--transition-fast);
+}
+
+.service-card:hover .learn-more {
+    transform: translateX(5px);
+    color: var(--accent-hover);
 }
 
 /* Contact Section */
