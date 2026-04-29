@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 // MARK: - Theme Colors
 struct ThemeColors {
@@ -42,6 +43,7 @@ struct ContentView: View {
         navAppearance.configureWithOpaqueBackground()
         navAppearance.backgroundColor = UIColor(red: 10/255, green: 15/255, blue: 28/255, alpha: 1.0)
         navAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().standardAppearance = navAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navAppearance
     }
@@ -51,6 +53,11 @@ struct ContentView: View {
             AnalyticsView()
                 .tabItem {
                     Label("Analytics", systemImage: "chart.bar.fill")
+                }
+            
+            CampaignsView()
+                .tabItem {
+                    Label("Campaigns", systemImage: "megaphone.fill")
                 }
             
             LeadsView()
@@ -64,75 +71,152 @@ struct ContentView: View {
                 }
         }
         .preferredColorScheme(.dark)
+        .tint(ThemeColors.accent)
     }
 }
 
 // MARK: - Analytics View
 struct AnalyticsView: View {
+    
+    struct TrafficData: Identifiable {
+        let id = UUID()
+        let month: String
+        let traffic: Int
+    }
+    
+    let chartData = [
+        TrafficData(month: "Jan", traffic: 4000),
+        TrafficData(month: "Feb", traffic: 5200),
+        TrafficData(month: "Mar", traffic: 5800),
+        TrafficData(month: "Apr", traffic: 7100),
+        TrafficData(month: "May", traffic: 8500),
+        TrafficData(month: "Jun", traffic: 9200),
+        TrafficData(month: "Jul", traffic: 11000),
+        TrafficData(month: "Aug", traffic: 12500)
+    ]
+    
     var body: some View {
-        ZStack {
-            ThemeColors.bg.ignoresSafeArea()
-            
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    
-                    // Top Bar
-                    HStack {
-                        Text("Dashboard Overview")
-                            .font(.title2)
-                            .bold()
-                            .foregroundColor(ThemeColors.textPrimary)
-                        Spacer()
-                        Circle()
-                            .fill(ThemeColors.accent)
-                            .frame(width: 40, height: 40)
-                            .overlay(Text("C").bold().foregroundColor(.white))
-                    }
-                    .padding(.top)
-                    
-                    // Metrics Grid
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        MetricCard(title: "Total Leads", value: "342", trend: "↑ 12%", isUp: true)
-                        MetricCard(title: "Website Traffic", value: "12.5k", trend: "↑ 8.4%", isUp: true)
-                        MetricCard(title: "Conversion Rate", value: "2.7%", trend: "↑ 0.3%", isUp: true)
-                        MetricCard(title: "Cost per Lead", value: "$42.50", trend: "↓ 5%", isUp: false)
-                    }
-                    
-                    // Charts Placeholder
-                    VStack(alignment: .leading, spacing: 15) {
-                        Text("Traffic & Lead Growth (YTD)")
-                            .font(.headline)
-                            .foregroundColor(ThemeColors.textPrimary)
+        NavigationView {
+            ZStack {
+                ThemeColors.bg.ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
                         
-                        // Fake chart visual
-                        GeometryReader { geo in
-                            Path { path in
-                                path.move(to: CGPoint(x: 0, y: geo.size.height))
-                                path.addLine(to: CGPoint(x: geo.size.width * 0.2, y: geo.size.height * 0.6))
-                                path.addLine(to: CGPoint(x: geo.size.width * 0.5, y: geo.size.height * 0.8))
-                                path.addLine(to: CGPoint(x: geo.size.width * 0.8, y: geo.size.height * 0.3))
-                                path.addLine(to: CGPoint(x: geo.size.width, y: geo.size.height * 0.1))
-                            }
-                            .stroke(ThemeColors.accent, lineWidth: 3)
-                            
-                            // Dots
-                            Circle().fill(ThemeColors.accent).frame(width: 8, height: 8).position(x: 0, y: geo.size.height)
-                            Circle().fill(ThemeColors.accent).frame(width: 8, height: 8).position(x: geo.size.width * 0.2, y: geo.size.height * 0.6)
-                            Circle().fill(ThemeColors.accent).frame(width: 8, height: 8).position(x: geo.size.width * 0.5, y: geo.size.height * 0.8)
-                            Circle().fill(ThemeColors.accent).frame(width: 8, height: 8).position(x: geo.size.width * 0.8, y: geo.size.height * 0.3)
-                            Circle().fill(ThemeColors.accent).frame(width: 8, height: 8).position(x: geo.size.width, y: geo.size.height * 0.1)
+                        // Metrics Grid
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                            MetricCard(title: "Total Leads", value: "342", trend: "↑ 12%", isUp: true)
+                            MetricCard(title: "Website Traffic", value: "12.5k", trend: "↑ 8.4%", isUp: true)
+                            MetricCard(title: "Conversion Rate", value: "2.7%", trend: "↑ 0.3%", isUp: true)
+                            MetricCard(title: "Cost per Lead", value: "$42.50", trend: "↓ 5%", isUp: false)
                         }
-                        .frame(height: 150)
+                        
+                        // Interactive Chart Area
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Traffic Growth (YTD)")
+                                .font(.headline)
+                                .foregroundColor(ThemeColors.textPrimary)
+                            
+                            Chart(chartData) { item in
+                                LineMark(
+                                    x: .value("Month", item.month),
+                                    y: .value("Traffic", item.traffic)
+                                )
+                                .lineStyle(StrokeStyle(lineWidth: 3))
+                                .foregroundStyle(ThemeColors.accent)
+                                
+                                PointMark(
+                                    x: .value("Month", item.month),
+                                    y: .value("Traffic", item.traffic)
+                                )
+                                .foregroundStyle(ThemeColors.accent)
+                                
+                                AreaMark(
+                                    x: .value("Month", item.month),
+                                    y: .value("Traffic", item.traffic)
+                                )
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [ThemeColors.accent.opacity(0.3), ThemeColors.accent.opacity(0.0)],
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                            }
+                            .chartYAxis {
+                                AxisMarks(position: .leading) { value in
+                                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5)).foregroundStyle(ThemeColors.glassBorder)
+                                    AxisTick().foregroundStyle(Color.clear)
+                                    AxisValueLabel().foregroundStyle(ThemeColors.textSecondary)
+                                }
+                            }
+                            .chartXAxis {
+                                AxisMarks(values: .automatic) { value in
+                                    AxisValueLabel().foregroundStyle(ThemeColors.textSecondary)
+                                }
+                            }
+                            .frame(height: 220)
+                        }
                         .padding()
+                        .background(ThemeColors.glassBg)
+                        .cornerRadius(16)
+                        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ThemeColors.glassBorder, lineWidth: 1))
+                        
+                        // Campaign ROI Breakdown
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Top Performing Campaigns")
+                                .font(.headline)
+                                .foregroundColor(ThemeColors.textPrimary)
+                            
+                            VStack(spacing: 12) {
+                                ROIRow(campaign: "Q4 B2B SaaS", leads: "145", roi: "320%")
+                                Divider().background(ThemeColors.glassBorder)
+                                ROIRow(campaign: "Local SEO Blast", leads: "98", roi: "210%")
+                                Divider().background(ThemeColors.glassBorder)
+                                ROIRow(campaign: "Retargeting Ads", leads: "42", roi: "150%")
+                            }
+                        }
+                        .padding()
+                        .background(ThemeColors.glassBg)
+                        .cornerRadius(16)
+                        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ThemeColors.glassBorder, lineWidth: 1))
                     }
-                    .padding()
-                    .background(ThemeColors.glassBg)
-                    .cornerRadius(16)
-                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(ThemeColors.glassBorder, lineWidth: 1))
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
             }
+            .navigationTitle("Analytics")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Circle()
+                        .fill(ThemeColors.accent)
+                        .frame(width: 32, height: 32)
+                        .overlay(Text("C").font(.system(size: 14, weight: .bold)).foregroundColor(.white))
+                }
+            }
+        }
+    }
+}
+
+struct ROIRow: View {
+    let campaign: String
+    let leads: String
+    let roi: String
+    
+    var body: some View {
+        HStack {
+            Text(campaign)
+                .font(.subheadline)
+                .foregroundColor(ThemeColors.textPrimary)
+            Spacer()
+            Text("\(leads) Leads")
+                .font(.subheadline)
+                .foregroundColor(ThemeColors.textSecondary)
+            Text(roi)
+                .font(.subheadline)
+                .bold()
+                .foregroundColor(ThemeColors.trendUp)
+                .frame(width: 60, alignment: .trailing)
         }
     }
 }
@@ -166,6 +250,113 @@ struct MetricCard: View {
     }
 }
 
+// MARK: - Campaigns View
+struct CampaignsView: View {
+    var body: some View {
+        NavigationView {
+            ZStack {
+                ThemeColors.bg.ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        
+                        CampaignCard(title: "Q4 B2B SaaS Outreach", status: "Active", leads: "24 Leads Generated", color: ThemeColors.accent)
+                        CampaignCard(title: "Local SEO Blast", status: "Active", leads: "18 Leads Generated", color: ThemeColors.trendUp)
+                        CampaignCard(title: "Retargeting Ad Campaign", status: "Paused", leads: "12 Leads Generated", color: ThemeColors.textSecondary)
+                        
+                        Text("Recent Campaign Activity")
+                            .font(.headline)
+                            .foregroundColor(ThemeColors.textPrimary)
+                            .padding(.top, 10)
+                        
+                        VStack(spacing: 0) {
+                            ActivityRow(action: "New Lead Captured", detail: "Alex Mercer (TechFlow)", time: "2 hours ago")
+                            Divider().background(ThemeColors.glassBorder).padding(.leading, 40)
+                            ActivityRow(action: "Campaign Paused", detail: "Retargeting Ads budget reached", time: "Yesterday")
+                            Divider().background(ThemeColors.glassBorder).padding(.leading, 40)
+                            ActivityRow(action: "Email Opened", detail: "Samantha Wright (Acme Corp)", time: "2 days ago")
+                        }
+                        .background(ThemeColors.glassBg)
+                        .cornerRadius(16)
+                        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ThemeColors.glassBorder, lineWidth: 1))
+                    }
+                    .padding()
+                }
+            }
+            .navigationTitle("Campaigns")
+        }
+    }
+}
+
+struct CampaignCard: View {
+    let title: String
+    let status: String
+    let leads: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(ThemeColors.textPrimary)
+            
+            Text(status)
+                .font(.title2)
+                .bold()
+                .foregroundColor(color)
+            
+            Text(leads)
+                .font(.subheadline)
+                .foregroundColor(ThemeColors.textSecondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(ThemeColors.glassBg)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(ThemeColors.glassBorder, lineWidth: 1)
+        )
+        .overlay(
+            Rectangle()
+                .fill(color)
+                .frame(width: 4)
+                .padding(.vertical, 1)
+            , alignment: .leading
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+struct ActivityRow: View {
+    let action: String
+    let detail: String
+    let time: String
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Circle()
+                .fill(ThemeColors.accent.opacity(0.2))
+                .frame(width: 8, height: 8)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(action)
+                    .font(.subheadline)
+                    .foregroundColor(ThemeColors.textPrimary)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundColor(ThemeColors.textSecondary)
+            }
+            Spacer()
+            Text(time)
+                .font(.caption)
+                .foregroundColor(ThemeColors.textSecondary)
+        }
+        .padding()
+    }
+}
+
+
 // MARK: - Leads View
 struct LeadsView: View {
     struct Lead: Identifiable {
@@ -173,13 +364,16 @@ struct LeadsView: View {
         let name: String
         let company: String
         let status: String
+        let email: String
+        let source: String
+        let date: String
     }
     
     let leads = [
-        Lead(name: "Sarah Jenkins", company: "Acme Corp", status: "Active"),
-        Lead(name: "Michael Chen", company: "TechFlow Startups", status: "Negotiating"),
-        Lead(name: "Elena Rodriguez", company: "DesignWorks", status: "New"),
-        Lead(name: "David Smith", company: "Smith Consulting", status: "Active")
+        Lead(name: "Sarah Jenkins", company: "Acme Corp", status: "Active", email: "sarah@acmecorp.com", source: "Inbound Website", date: "Oct 24, 2026"),
+        Lead(name: "Michael Chen", company: "TechFlow Startups", status: "Negotiating", email: "m.chen@techflow.io", source: "Q4 B2B SaaS", date: "Oct 22, 2026"),
+        Lead(name: "Elena Rodriguez", company: "DesignWorks", status: "New", email: "elena@designworks.com", source: "Local SEO Blast", date: "Oct 20, 2026"),
+        Lead(name: "David Smith", company: "Smith Consulting", status: "Active", email: "david@smithconsulting.com", source: "Retargeting Ads", date: "Oct 15, 2026")
     ]
     
     var body: some View {
@@ -189,31 +383,33 @@ struct LeadsView: View {
                 
                 List {
                     ForEach(leads) { lead in
-                        HStack {
-                            Circle()
-                                .fill(ThemeColors.bgSecondary)
-                                .frame(width: 40, height: 40)
-                                .overlay(Text(String(lead.name.prefix(1))).foregroundColor(ThemeColors.accent).bold())
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(lead.name)
-                                    .font(.headline)
-                                    .foregroundColor(ThemeColors.textPrimary)
-                                Text(lead.company)
-                                    .font(.subheadline)
-                                    .foregroundColor(ThemeColors.textSecondary)
+                        NavigationLink(destination: LeadDetailView(lead: lead)) {
+                            HStack {
+                                Circle()
+                                    .fill(ThemeColors.bgSecondary)
+                                    .frame(width: 40, height: 40)
+                                    .overlay(Text(String(lead.name.prefix(1))).foregroundColor(ThemeColors.accent).bold())
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(lead.name)
+                                        .font(.headline)
+                                        .foregroundColor(ThemeColors.textPrimary)
+                                    Text(lead.company)
+                                        .font(.subheadline)
+                                        .foregroundColor(ThemeColors.textSecondary)
+                                }
+                                
+                                Spacer()
+                                
+                                Text(lead.status)
+                                    .font(.caption)
+                                    .bold()
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(ThemeColors.accent.opacity(0.1))
+                                    .foregroundColor(ThemeColors.accent)
+                                    .cornerRadius(8)
                             }
-                            
-                            Spacer()
-                            
-                            Text(lead.status)
-                                .font(.caption)
-                                .bold()
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(ThemeColors.accent.opacity(0.1))
-                                .foregroundColor(ThemeColors.accent)
-                                .cornerRadius(8)
                         }
                         .listRowBackground(ThemeColors.bg)
                         .listRowSeparatorTint(ThemeColors.glassBorder)
@@ -224,7 +420,6 @@ struct LeadsView: View {
                 .scrollContentBackground(.hidden)
             }
             .navigationTitle("Active Leads")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {}) {
@@ -237,6 +432,97 @@ struct LeadsView: View {
     }
 }
 
+struct LeadDetailView: View {
+    let lead: LeadsView.Lead
+    
+    var body: some View {
+        ZStack {
+            ThemeColors.bg.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(alignment: .center, spacing: 16) {
+                    Circle()
+                        .fill(ThemeColors.bgSecondary)
+                        .frame(width: 80, height: 80)
+                        .overlay(Text(String(lead.name.prefix(1))).font(.largeTitle).foregroundColor(ThemeColors.accent).bold())
+                        .padding(.top, 20)
+                    
+                    Text(lead.name)
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(ThemeColors.textPrimary)
+                    
+                    Text(lead.company)
+                        .font(.title3)
+                        .foregroundColor(ThemeColors.textSecondary)
+                    
+                    Text(lead.status)
+                        .font(.subheadline)
+                        .bold()
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(ThemeColors.accent.opacity(0.1))
+                        .foregroundColor(ThemeColors.accent)
+                        .cornerRadius(12)
+                        .padding(.bottom, 20)
+                    
+                    VStack(spacing: 0) {
+                        DetailRow(title: "Email", value: lead.email)
+                        Divider().background(ThemeColors.glassBorder).padding(.leading, 16)
+                        DetailRow(title: "Source", value: lead.source)
+                        Divider().background(ThemeColors.glassBorder).padding(.leading, 16)
+                        DetailRow(title: "Date Captured", value: lead.date)
+                    }
+                    .background(ThemeColors.glassBg)
+                    .cornerRadius(16)
+                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(ThemeColors.glassBorder, lineWidth: 1))
+                    .padding(.horizontal)
+                    
+                    HStack(spacing: 16) {
+                        Button(action: {}) {
+                            Label("Email Lead", systemImage: "envelope.fill")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(ThemeColors.accent)
+                                .cornerRadius(12)
+                        }
+                        
+                        Button(action: {}) {
+                            Image(systemName: "phone.fill")
+                                .font(.headline)
+                                .foregroundColor(ThemeColors.textPrimary)
+                                .padding()
+                                .background(ThemeColors.bgSecondary)
+                                .cornerRadius(12)
+                        }
+                    }
+                    .padding()
+                }
+            }
+        }
+        .navigationTitle("Lead Profile")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct DetailRow: View {
+    let title: String
+    let value: String
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .foregroundColor(ThemeColors.textSecondary)
+            Spacer()
+            Text(value)
+                .foregroundColor(ThemeColors.textPrimary)
+        }
+        .padding()
+    }
+}
+
 // MARK: - Inbox View
 struct InboxView: View {
     struct Email: Identifiable {
@@ -244,17 +530,17 @@ struct InboxView: View {
         let sender: String
         let subject: String
         let preview: String
+        let fullMessage: String
         let date: String
-        let isUnread: Bool
-        let isStarred: Bool
+        var isUnread: Bool
+        var isStarred: Bool
     }
     
-    let emails = [
-        Email(sender: "Sarah Jenkins", subject: "Website Redesign Inquiry", preview: "Hi there, we are looking to revamp our...", date: "10:42 AM", isUnread: true, isStarred: false),
-        Email(sender: "Michael Chen", subject: "SEO Services Quote", preview: "I found you via Google and I'm interested...", date: "Yesterday", isUnread: true, isStarred: false),
-        Email(sender: "Acme Corp", subject: "Partnership Opportunity", preview: "We love your creative design work and want to discuss...", date: "Oct 12", isUnread: true, isStarred: true),
-        Email(sender: "David Smith", subject: "Following up on proposal", preview: "Thanks for the call yesterday. I have a few questions...", date: "Oct 10", isUnread: false, isStarred: false),
-        Email(sender: "Elena Rodriguez", subject: "New brand identity", preview: "Are you available to take on a new branding project...", date: "Oct 05", isUnread: false, isStarred: false)
+    @State private var emails = [
+        Email(sender: "Sarah Jenkins", subject: "Website Redesign Inquiry", preview: "Hi there, we are looking to revamp our...", fullMessage: "Hi there,\n\nWe are looking to revamp our agency website. Our current site is over 5 years old and doesn't convert well. We loved the work you did for Acme Corp and want to discuss a similar project.\n\nBest,\nSarah", date: "10:42 AM", isUnread: true, isStarred: false),
+        Email(sender: "Michael Chen", subject: "SEO Services Quote", preview: "I found you via Google and I'm interested...", fullMessage: "I found you via Google and I'm interested in your local SEO packages for my dental practice in Boston. Can you send over a pricing sheet?\n\n- Michael", date: "Yesterday", isUnread: true, isStarred: false),
+        Email(sender: "Acme Corp", subject: "Partnership Opportunity", preview: "We love your creative design work and want to discuss...", fullMessage: "Hello 508 team,\n\nWe love your creative design work and want to discuss a potential partnership where we white-label your services for our clients.\n\nThanks!", date: "Oct 12", isUnread: false, isStarred: true),
+        Email(sender: "David Smith", subject: "Following up on proposal", preview: "Thanks for the call yesterday. I have a few questions...", fullMessage: "Thanks for the call yesterday. I have a few questions about the timeline you proposed. Can we hop on a quick call tomorrow?", date: "Oct 10", isUnread: false, isStarred: false)
     ]
     
     var body: some View {
@@ -262,15 +548,18 @@ struct InboxView: View {
             ZStack {
                 ThemeColors.bg.ignoresSafeArea()
                 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(emails) { email in
+                List {
+                    ForEach($emails) { $email in
+                        NavigationLink(destination: EmailDetailView(email: $email)) {
                             VStack(spacing: 0) {
                                 HStack(spacing: 12) {
                                     // Star icon
                                     Image(systemName: email.isStarred ? "star.fill" : "star")
                                         .foregroundColor(email.isStarred ? ThemeColors.accent : ThemeColors.textSecondary)
                                         .font(.system(size: 16))
+                                        .onTapGesture {
+                                            email.isStarred.toggle()
+                                        }
                                     
                                     VStack(alignment: .leading, spacing: 4) {
                                         HStack {
@@ -295,18 +584,32 @@ struct InboxView: View {
                                         }
                                     }
                                 }
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                                .background(email.isUnread ? ThemeColors.glassBg : Color.clear)
-                                
-                                Divider().background(ThemeColors.glassBorder)
+                                .padding(.vertical, 8)
+                            }
+                        }
+                        .listRowBackground(email.isUnread ? ThemeColors.glassBg : ThemeColors.bg)
+                        .listRowSeparatorTint(ThemeColors.glassBorder)
+                        .swipeActions(edge: .leading) {
+                            Button { email.isUnread.toggle() } label: {
+                                Label(email.isUnread ? "Read" : "Unread", systemImage: email.isUnread ? "envelope.open.fill" : "envelope.fill")
+                            }
+                            .tint(ThemeColors.accent)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                if let index = emails.firstIndex(where: { $0.id == email.id }) {
+                                    emails.remove(at: index)
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash.fill")
                             }
                         }
                     }
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
             .navigationTitle("Inbox")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {}) {
@@ -315,6 +618,69 @@ struct InboxView: View {
                     }
                 }
             }
+        }
+    }
+}
+
+struct EmailDetailView: View {
+    @Binding var email: InboxView.Email
+    
+    var body: some View {
+        ZStack {
+            ThemeColors.bg.ignoresSafeArea()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text(email.subject)
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(ThemeColors.textPrimary)
+                    
+                    HStack {
+                        Circle()
+                            .fill(ThemeColors.bgSecondary)
+                            .frame(width: 44, height: 44)
+                            .overlay(Text(String(email.sender.prefix(1))).foregroundColor(ThemeColors.accent).bold())
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(email.sender)
+                                .font(.headline)
+                                .foregroundColor(ThemeColors.textPrimary)
+                            Text(email.date)
+                                .font(.caption)
+                                .foregroundColor(ThemeColors.textSecondary)
+                        }
+                        Spacer()
+                    }
+                    
+                    Divider().background(ThemeColors.glassBorder)
+                    
+                    Text(email.fullMessage)
+                        .font(.body)
+                        .foregroundColor(ThemeColors.textPrimary)
+                        .lineSpacing(6)
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Button(action: {}) {
+                            Label("Reply", systemImage: "arrowshape.turn.up.left.fill")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(ThemeColors.accent)
+                                .cornerRadius(12)
+                        }
+                    }
+                    .padding(.top, 40)
+                }
+                .padding()
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            email.isUnread = false
         }
     }
 }
