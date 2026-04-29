@@ -4,42 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Strategic Marketing | 508 Consulting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="cursor-glow"></div>
     <nav class="navbar scrolled" id="navbar">
-        <a href="index.html" class="logo">508<span>.</span></a>
-        <div class="nav-links" id="navLinks">
-            <a href="index.html">Home</a>
-            <a href="index.html#about">About</a>
-            <a href="index.html#services">Services</a>
-            <a href="login.html">Client Login</a>
-            <a href="index.html#contact" class="btn-primary-outline">Contact Us</a>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">508<span>.</span></a>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html">Home</a>
+                <a href="index.html#about">About</a>
+                <a href="index.html#services">Services</a>
+                <a href="login.html">Client Login</a>
+                <a href="index.html#contact" class="btn-primary-outline">Contact Us</a>
+            </div>
         </div>
     </nav>
-    <header class="hero" style="min-height: 50vh;">
-        <div class="hero-bg-glow"></div>
-        <div class="hero-content fade-in-up" style="margin-top: 80px;">
-            <div class="badge">Our Service</div>
-            <h1>Strategic <span class="accent">Marketing.</span></h1>
-            <p>Data-driven campaigns to elevate your brand.</p>
+
+    <header class="hero" style="height: 60vh;">
+        <div class="hero-bg-media">
+            <img src="assets/hero-bg.png" alt="Background" class="hero-bg-img">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content fade-in-up">
+                <div class="badge-premium">Our Expertise</div>
+                <h1>Strategic <span class="accent">Marketing.</span></h1>
+                <p>Data-driven strategies that amplify your brand's reach.</p>
+            </div>
         </div>
     </header>
+
     <section class="section">
-        <div class="container" style="max-width: 800px; font-size: 1.1rem; line-height: 1.8;">
-            <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">Driving Growth through Strategy</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Our strategic marketing services encompass brand positioning, ad campaigns, email marketing, and comprehensive SEO/SEM campaigns. We focus on measurable results and robust reputation management to ensure your brand stands out in the crowded SMB market.</p>
-            <p style="color: var(--text-secondary); margin-bottom: 2.5rem;">With a focus on ROI, we turn audiences into loyal customers through targeted engagement and smart market analysis. We ensure your marketing dollars are spent efficiently, maximizing your reach and impact.</p>
-            <div>
+        <div class="container" style="max-width: 800px;">
+            <h2 class="section-title">Driving Growth Through Insight</h2>
+            <div class="fade-in-up">
+                <p style="color: var(--text-dim); margin-bottom: 1.5rem; font-size: 1.2rem;">Our strategic marketing services encompass brand positioning, integrated ad campaigns, and advanced lead generation. We don't just follow trends—we analyze your specific market to find the highest leverage points for growth.</p>
+                <p style="color: var(--text-dim); margin-bottom: 2.5rem;">From SEO/SEM management to reputation monitoring and email automation, we provide a full-stack marketing engine designed for the SMB market but built to enterprise standards.</p>
                 <a href="index.html#contact" class="btn-primary">Start Your Campaign</a>
             </div>
         </div>
     </section>
+
     <footer>
-        <div class="container footer-content">
-            <div class="footer-brand"><div class="logo">508<span>.</span></div><p>Boston's premier consulting partner.</p></div>
-            <div class="footer-legal"><p>&copy; 2026 508 Consulting LLC. All rights reserved.</p></div>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <div class="logo">508<span>.</span></div>
+                <p>Boston's premier integrated interactive agency.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h5>Company</h5>
+                    <a href="index.html#about">About</a>
+                    <a href="index.html#services">Services</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2026 508 Consulting LLC. All rights reserved.</p>
         </div>
     </footer>
     <script src="main.js"></script>

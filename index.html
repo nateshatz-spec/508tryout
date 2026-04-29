@@ -3,129 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="508 Consulting - Integrated interactive agency providing strategic marketing, creative design, and technology solutions for SMBs.">
-    <title>508 Consulting | Marketing, Design & Technology</title>
+    <meta name="description" content="508 Consulting - Premium integrated interactive agency for strategic marketing, creative design, and technology solutions.">
+    <title>508 Consulting | Elevating SMBs with Premium Strategy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="cursor-glow"></div>
     <nav class="navbar" id="navbar">
-        <div class="logo">508<span>.</span></div>
-        <div class="nav-links" id="navLinks">
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="dashboard.html">Client Portal</a>
-            <a href="#contact" class="btn-primary-outline">Contact Us</a>
+        <div class="container nav-container">
+            <div class="logo">508<span>.</span></div>
+            <div class="nav-links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="dashboard.html">Client Portal</a>
+                <a href="#contact" class="btn-primary-outline">Contact Us</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileBtn" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
-        <button class="mobile-menu-btn" id="mobileBtn" aria-label="Toggle Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </nav>
 
     <header class="hero" id="home">
-        <div class="hero-bg-glow"></div>
-        <div class="hero-content fade-in-up">
-            <div class="badge">Boston, MA</div>
-            <h1>Integrated Interactive<br><span class="accent">Agency.</span></h1>
-            <p>World-class strategic marketing, creative design, and technology solutions—affordable enough for the SMB market.</p>
-            <div class="hero-actions">
-                <a href="#services" class="btn-primary">Our Services</a>
-                <a href="#contact" class="btn-secondary">Let's Talk</a>
+        <div class="hero-bg-media">
+            <img src="assets/hero-bg.png" alt="Hero Background" class="hero-bg-img">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="container hero-container">
+            <div class="hero-content fade-in-up">
+                <div class="badge-premium">Boston's Elite Consulting</div>
+                <h1>Strategic Excellence.<br><span class="accent">Interactive Future.</span></h1>
+                <p>We bridge the gap between high-end enterprise strategy and SMB agility. World-class marketing, design, and technology tailored for your growth.</p>
+                <div class="hero-actions">
+                    <a href="#services" class="btn-primary">Explore Solutions</a>
+                    <a href="#contact" class="btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
             </div>
         </div>
     </header>
 
-    <section id="about" class="about section">
+    <section class="trust-bar section-mini">
         <div class="container">
-            <h2 class="section-title fade-in-up">World-Class Results.<br><span>SMB Affordable.</span></h2>
-            <div class="about-grid fade-in-up delay-1">
-                <div class="about-text">
-                    <p>At 508 Consulting, we are an integrated interactive agency under one roof. We help develop brand positioning, logo designs, ad campaigns, and extend through to online marketing, web development, SEO/SEM, and more.</p>
-                    <p>We strive to produce world-class results, second to none, while still keeping our services and solutions affordable enough for the SMB market, and not just "the big boys."</p>
+            <p class="trust-label">TRUSTED BY INNOVATORS WORLDWIDE</p>
+            <div class="partners-grid">
+                <img src="assets/partners.png" alt="Partner Logos" class="partners-img">
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about section">
+        <div class="container grid-2">
+            <div class="about-visual fade-in-up">
+                <div class="glass-card main-visual">
+                    <img src="assets/dashboard.png" alt="Analytics Dashboard" class="dashboard-preview">
                 </div>
-                <div class="about-stats">
-                    <div class="stat-box glass-panel">
-                        <span class="stat-number">2024</span>
-                        <span class="stat-label">Founded</span>
+                <div class="floating-badge glass-panel">
+                    <span class="highlight">85%</span>
+                    <span class="label">Avg. ROI Increase</span>
+                </div>
+            </div>
+            <div class="about-text fade-in-up delay-1">
+                <h2 class="section-title">Beyond Consulting.<br><span>True Partnership.</span></h2>
+                <p>At 508 Consulting, we don't just advise—we execute. Our integrated approach combines brand positioning, technical development, and data-driven marketing under one roof.</p>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="icon">✦</div>
+                        <div>
+                            <h4>Enterprise Standards</h4>
+                            <p>We apply the same rigors used by Fortune 500s to your SMB workflow.</p>
+                        </div>
                     </div>
-                    <div class="stat-box glass-panel">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">Companies Scaled</span>
+                    <div class="feature-item">
+                        <div class="icon">◈</div>
+                        <div>
+                            <h4>Rapid Execution</h4>
+                            <p>Turn ideas into market-ready solutions in weeks, not months.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="services" class="services section">
+    <section id="services" class="services section bg-alt">
         <div class="container">
-            <h2 class="section-title text-center fade-in-up">Our <span>Services</span></h2>
+            <div class="section-header text-center fade-in-up">
+                <h2 class="section-title">Our <span>Services</span></h2>
+                <p class="section-subtitle">Comprehensive solutions for the modern digital landscape.</p>
+            </div>
             <div class="services-grid">
-                <a href="strategic-marketing.html" class="service-card glass-panel fade-in-up">
-                    <div class="service-icon">✦</div>
+                <div class="service-card glass-panel fade-in-up">
+                    <div class="service-icon">01</div>
                     <h3>Strategic Marketing</h3>
-                    <p>Brand positioning, ad campaigns, email marketing, SEO/SEM campaigns, and reputation management to drive growth.</p>
-                    <span class="learn-more">Learn More &rarr;</span>
-                </a>
-                <a href="creative-design.html" class="service-card glass-panel fade-in-up delay-1">
-                    <div class="service-icon">◈</div>
+                    <p>Positioning, SEO/SEM, and reputation management that converts leads into loyal advocates.</p>
+                    <ul class="service-details">
+                        <li>Brand Positioning</li>
+                        <li>Lead Generation</li>
+                        <li>Market Analysis</li>
+                    </ul>
+                </div>
+                <div class="service-card glass-panel fade-in-up delay-1">
+                    <div class="service-icon">02</div>
                     <h3>Creative Design</h3>
-                    <p>Logo design, stationery design, branding, brand development, graphic design, and compelling copywriting.</p>
-                    <span class="learn-more">Learn More &rarr;</span>
-                </a>
-                <a href="technology-solutions.html" class="service-card glass-panel fade-in-up delay-2">
-                    <div class="service-icon">◉</div>
+                    <p>Bespoke branding and visual identities that resonate with your target audience.</p>
+                    <ul class="service-details">
+                        <li>Logo & Identity</li>
+                        <li>UI/UX Design</li>
+                        <li>Digital Assets</li>
+                    </ul>
+                </div>
+                <div class="service-card glass-panel fade-in-up delay-2">
+                    <div class="service-icon">03</div>
                     <h3>Technology Solutions</h3>
-                    <p>Custom web site design, web development, and software solutions tailored for the SMB market.</p>
-                    <span class="learn-more">Learn More &rarr;</span>
-                </a>
+                    <p>Custom web and software development built for performance, security, and scale.</p>
+                    <ul class="service-details">
+                        <li>Custom Web Apps</li>
+                        <li>Cloud Integration</li>
+                        <li>SEO Optimization</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="contact" class="contact section">
         <div class="container">
-            <div class="contact-wrapper glass-panel fade-in-up">
-                <div class="contact-info">
+            <div class="contact-card glass-panel fade-in-up">
+                <div class="contact-content">
                     <h2>Ready to Scale?</h2>
-                    <p>Let's discuss how 508 Consulting can elevate your business.</p>
-                    <div class="contact-details">
-                        <p><strong>Phone</strong><br>508.603.9679</p>
-                        <p><strong>Email</strong><br>hello@508consulting.com</p>
+                    <p>Let's build something extraordinary together. Contact our Boston team today.</p>
+                    <div class="contact-meta">
+                        <div class="meta-item">
+                            <strong>EMAIL</strong>
+                            <span>hello@508consulting.com</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>PHONE</strong>
+                            <span>508.603.9679</span>
+                        </div>
                     </div>
                 </div>
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" required placeholder="Jane Doe">
+                <form class="contact-form">
+                    <div class="input-group">
+                        <input type="text" placeholder="Your Name" required>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required placeholder="jane@company.com">
+                    <div class="input-group">
+                        <input type="email" placeholder="Your Email" required>
                     </div>
-                    <div class="form-group">
-                        <label for="message">How can we help?</label>
-                        <textarea id="message" rows="4" required placeholder="Tell us about your challenges..."></textarea>
+                    <div class="input-group">
+                        <textarea placeholder="Tell us about your project" rows="4" required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary submit-btn">Send Inquiry</button>
+                    <button type="submit" class="btn-primary">Send Message</button>
                 </form>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="container footer-content">
+        <div class="container footer-grid">
             <div class="footer-brand">
                 <div class="logo">508<span>.</span></div>
-                <p>Boston's premier consulting partner.</p>
+                <p>Boston's premier integrated interactive agency.</p>
             </div>
-            <div class="footer-legal">
-                <p>&copy; 2026 508 Consulting LLC. All rights reserved.</p>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h5>Company</h5>
+                    <a href="#about">About</a>
+                    <a href="#services">Services</a>
+                    <a href="#portfolio">Portfolio</a>
+                </div>
+                <div class="link-group">
+                    <h5>Legal</h5>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
             </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>&copy; 2026 508 Consulting LLC. All rights reserved.</p>
         </div>
     </footer>
 
