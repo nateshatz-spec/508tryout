@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="508 Consulting - Integrated interactive agency providing strategic marketing, creative design, and technology solutions for SMBs.">
+    <title>508 Consulting | Marketing, Design & Technology</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="logo">508<span>.</span></div>
+        <div class="nav-links" id="navLinks">
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="login.html">Client Login</a>
+            <a href="#contact" class="btn-primary-outline">Contact Us</a>
+        </div>
+        <button class="mobile-menu-btn" id="mobileBtn" aria-label="Toggle Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <header class="hero" id="home">
+        <div class="hero-bg-glow"></div>
+        <div class="hero-content fade-in-up">
+            <div class="badge">Boston, MA</div>
+            <h1>Integrated Interactive<br><span class="accent">Agency.</span></h1>
+            <p>World-class strategic marketing, creative design, and technology solutions—affordable enough for the SMB market.</p>
+            <div class="hero-actions">
+                <a href="#services" class="btn-primary">Our Services</a>
+                <a href="#contact" class="btn-secondary">Let's Talk</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="about section">
+        <div class="container">
+            <h2 class="section-title fade-in-up">World-Class Results.<br><span>SMB Affordable.</span></h2>
+            <div class="about-grid fade-in-up delay-1">
+                <div class="about-text">
+                    <p>At 508 Consulting, we are an integrated interactive agency under one roof. We help develop brand positioning, logo designs, ad campaigns, and extend through to online marketing, web development, SEO/SEM, and more.</p>
+                    <p>We strive to produce world-class results, second to none, while still keeping our services and solutions affordable enough for the SMB market, and not just "the big boys."</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-box glass-panel">
+                        <span class="stat-number">2024</span>
+                        <span class="stat-label">Founded</span>
+                    </div>
+                    <div class="stat-box glass-panel">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Companies Scaled</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services section">
+        <div class="container">
+            <h2 class="section-title text-center fade-in-up">Our <span>Services</span></h2>
+            <div class="services-grid">
+                <a href="strategic-marketing.html" class="service-card glass-panel fade-in-up">
+                    <div class="service-icon">✦</div>
+                    <h3>Strategic Marketing</h3>
+                    <p>Brand positioning, ad campaigns, email marketing, SEO/SEM campaigns, and reputation management to drive growth.</p>
+                    <span class="learn-more">Learn More &rarr;</span>
+                </a>
+                <a href="creative-design.html" class="service-card glass-panel fade-in-up delay-1">
+                    <div class="service-icon">◈</div>
+                    <h3>Creative Design</h3>
+                    <p>Logo design, stationery design, branding, brand development, graphic design, and compelling copywriting.</p>
+                    <span class="learn-more">Learn More &rarr;</span>
+                </a>
+                <a href="technology-solutions.html" class="service-card glass-panel fade-in-up delay-2">
+                    <div class="service-icon">◉</div>
+                    <h3>Technology Solutions</h3>
+                    <p>Custom web site design, web development, and software solutions tailored for the SMB market.</p>
+                    <span class="learn-more">Learn More &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact section">
+        <div class="container">
+            <div class="contact-wrapper glass-panel fade-in-up">
+                <div class="contact-info">
+                    <h2>Ready to Scale?</h2>
+                    <p>Let's discuss how 508 Consulting can elevate your business.</p>
+                    <div class="contact-details">
+                        <p><strong>Phone</strong><br>508.603.9679</p>
+                        <p><strong>Email</strong><br>hello@508consulting.com</p>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required placeholder="Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required placeholder="jane@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">How can we help?</label>
+                        <textarea id="message" rows="4" required placeholder="Tell us about your challenges..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary submit-btn">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo">508<span>.</span></div>
+                <p>Boston's premier consulting partner.</p>
+            </div>
+            <div class="footer-legal">
+                <p>&copy; 2026 508 Consulting LLC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

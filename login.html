@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Login | 508 Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(15, 150, 216, 0.1) 0%, var(--bg-color) 70%);
+        }
+        .login-box {
+            width: 100%;
+            max-width: 450px;
+            padding: 3rem;
+            text-align: center;
+        }
+        .login-box h2 {
+            margin-bottom: 0.5rem;
+        }
+        .login-box p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body class="login-page">
+    <div class="login-box glass-panel fade-in-up">
+        <a href="index.html" class="logo" style="display: block; margin-bottom: 2rem;">508<span>.</span></a>
+        <h2>Client Portal</h2>
+        <p>Sign in to view your campaign analytics.</p>
+        
+        <form class="contact-form" id="loginForm">
+            <div class="form-group" style="text-align: left;">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="client@company.com">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-primary submit-btn">Sign In</button>
+        </form>
+        
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent actual form submission
+            
+            // Add a small loading effect
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = 'Authenticating...';
+            btn.style.opacity = '0.8';
+            
+            // Simulate network request
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
+        });
+        
+        // Trigger animation
+        setTimeout(() => {
+            document.querySelector('.fade-in-up').classList.add('visible');
+        }, 100);
+    </script>
+</body>
+</html>

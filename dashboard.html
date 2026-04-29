@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | 508 Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for Analytics Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-logo { margin-bottom: 3rem; }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .sidebar-nav a {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(15, 150, 216, 0.1);
+            color: var(--accent-color);
+        }
+        .sidebar-footer { margin-top: auto; }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 3rem;
+            background: var(--bg-color);
+            overflow-y: auto;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .avatar {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #fff;
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .metric-card {
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+        }
+        .metric-title {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: var(--font-heading);
+            margin-bottom: 0.5rem;
+        }
+        .metric-trend {
+            font-size: 0.85rem;
+        }
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        
+        /* Charts Area */
+        .charts-area {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; } /* In a real app, this would be a toggle menu */
+            .main-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="logo sidebar-logo">508<span>.</span></a>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="active">Overview</a>
+                <a href="dashboard-campaigns.html">Campaigns</a>
+                <a href="dashboard-leads.html">Lead Inbox</a>
+                <a href="dashboard-reports.html">Reports</a>
+                <a href="dashboard-settings.html">Settings</a>
+            </nav>
+            <div class="sidebar-footer sidebar-nav">
+                <a href="index.html">Sign Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar fade-in-up">
+                <h2>Dashboard Overview</h2>
+                <div class="user-profile">
+                    <span>Welcome back, Client</span>
+                    <div class="avatar">C</div>
+                </div>
+            </div>
+
+            <div class="metrics-grid fade-in-up delay-1">
+                <div class="metric-card">
+                    <div class="metric-title">Total Leads</div>
+                    <div class="metric-value">342</div>
+                    <div class="metric-trend trend-up">&uarr; 12% vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Website Traffic</div>
+                    <div class="metric-value">12.5k</div>
+                    <div class="metric-trend trend-up">&uarr; 8.4% vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Conversion Rate</div>
+                    <div class="metric-value">2.7%</div>
+                    <div class="metric-trend trend-up">&uarr; 0.3% vs last month</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Cost per Lead</div>
+                    <div class="metric-value">$42.50</div>
+                    <div class="metric-trend trend-down">&darr; 5% vs last month</div>
+                </div>
+            </div>
+
+            <div class="charts-area fade-in-up delay-2">
+                <h3 style="margin-bottom: 1.5rem;">Traffic & Lead Growth (YTD)</h3>
+                <canvas id="growthChart" height="100"></canvas>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Trigger animations
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
+        }, 100);
+
+        // Initialize Chart.js
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        
+        // Define theme colors
+        const accentColor = '#0f96d8';
+        const secondaryColor = 'rgba(15, 150, 216, 0.2)';
+        const textColor = '#94A3B8';
+        const gridColor = 'rgba(255, 255, 255, 0.05)';
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                datasets: [{
+                    label: 'Website Traffic',
+                    data: [4000, 5200, 5800, 7100, 8500, 9200, 11000, 12500],
+                    borderColor: accentColor,
+                    backgroundColor: secondaryColor,
+                    borderWidth: 3,
+                    pointBackgroundColor: accentColor,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(5, 8, 17, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: gridColor, drawBorder: false },
+                        ticks: { color: textColor }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { color: textColor }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
