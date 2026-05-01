@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Manager | 508 Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-logo { margin-bottom: 3rem; }
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .sidebar-nav a {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(15, 150, 216, 0.1);
+            color: var(--accent-color);
+        }
+        .sidebar-footer { margin-top: auto; }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 3rem;
+            background: var(--bg-color);
+            overflow-y: auto;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .channel-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .channel-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .channel-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .channel-info h4 { margin-bottom: 0.2rem; }
+        .channel-status { font-size: 0.75rem; color: #10b981; font-weight: 600; }
+
+        .social-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .metrics-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="index.html" class="logo sidebar-logo">508<span>.</span></a>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html">Overview</a>
+                <a href="dashboard-agents.html">AI Agent Hub</a>
+                <a href="dashboard-social.html" class="active">Social Manager</a>
+                <a href="dashboard-campaigns.html">Campaigns</a>
+                <a href="dashboard-leads.html">Lead Inbox</a>
+                <a href="dashboard-reports.html">Reports</a>
+                <a href="dashboard-settings.html">Settings</a>
+            </nav>
+            <div class="sidebar-footer sidebar-nav">
+                <a href="index.html">Sign Out</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar fade-in-up">
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Social Media Hub</h2>
+                    <p style="color: var(--text-dim);">Centralized orchestration for all your brand channels.</p>
+                </div>
+                <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">+ Add Channel</button>
+            </div>
+
+            <div class="channel-row fade-in-up delay-1">
+                <div class="channel-card">
+                    <div class="channel-icon" style="background: rgba(225, 48, 108, 0.1); color: #E1306C;">&#x2139;</div>
+                    <div class="channel-info">
+                        <h4>Instagram</h4>
+                        <div class="channel-status">&#x25cf; Connected</div>
+                    </div>
+                    <div style="margin-left: auto; text-align: right;">
+                        <div style="font-weight: 700;">12.4k</div>
+                        <div style="font-size: 0.7rem; color: var(--text-dim);">Followers</div>
+                    </div>
+                </div>
+                <div class="channel-card">
+                    <div class="channel-icon" style="background: rgba(0, 119, 181, 0.1); color: #0077b5;">&#x2112;</div>
+                    <div class="channel-info">
+                        <h4>LinkedIn</h4>
+                        <div class="channel-status">&#x25cf; Connected</div>
+                    </div>
+                    <div style="margin-left: auto; text-align: right;">
+                        <div style="font-weight: 700;">3.8k</div>
+                        <div style="font-size: 0.7rem; color: var(--text-dim);">Connections</div>
+                    </div>
+                </div>
+                <div class="channel-card" style="opacity: 0.6; border-style: dashed;">
+                    <div class="channel-icon" style="background: rgba(255, 255, 255, 0.05); color: #fff;">&#x214f;</div>
+                    <div class="channel-info">
+                        <h4>X (Twitter)</h4>
+                        <div style="font-size: 0.75rem; color: var(--text-dim);">Not Connected</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="social-metrics fade-in-up delay-2">
+                <div class="metrics-panel">
+                    <h3 style="margin-bottom: 2rem;">Engagement Growth</h3>
+                    <canvas id="engagementChart" height="250"></canvas>
+                </div>
+                <div class="metrics-panel" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <h3 style="margin-bottom: 0.5rem;">Top Performing Content</h3>
+                    
+                    <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
+                        <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #7000ff, #00f5ff); opacity: 0.5;"></div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; font-size: 0.9rem;">Strategy First: Why SMBs...</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Instagram &#x2022; 2 days ago</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: var(--primary-cyan); font-weight: 700;">854</div>
+                            <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
+                        </div>
+                    </div>
+
+                    <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
+                        <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00f5ff, #7000ff); opacity: 0.5;"></div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; font-size: 0.9rem;">The Future of AI in...</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">LinkedIn &#x2022; 4 days ago</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: var(--primary-cyan); font-weight: 700;">642</div>
+                            <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Trigger animations
+        setTimeout(() => {
+            document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
+        }, 100);
+
+        // Chart
+        const ctx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Engagements',
+                    data: [120, 190, 300, 250, 420, 380, 510],
+                    backgroundColor: 'rgba(0, 245, 255, 0.3)',
+                    borderColor: '#00f5ff',
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
