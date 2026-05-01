@@ -6,6 +6,7 @@
     <title>AI Agent Hub | 508 Consulting</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="theme-switcher.js"></script>
     <style>
         .dashboard-layout {
             display: grid;
@@ -97,6 +98,45 @@
         }
         .status-active { background: rgba(16, 185, 129, 0.1); color: #10b981; }
         .status-learning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 600px;
+            padding: 2.5rem;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 1.5rem; right: 1.5rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-dim);
+        }
+        .log-entry {
+            font-family: monospace;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dim);
+            padding-left: 1rem;
+            border-left: 2px solid var(--primary-cyan);
+        }
+        .log-entry span { color: var(--primary-cyan); margin-right: 8px; }
+
+        .agent-card { cursor: pointer; }
         
         .agent-meta {
             display: grid;
@@ -272,11 +312,82 @@
         </main>
     </div>
 
+    <!-- Modal -->
+    <div class="modal-overlay" id="agentModal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2rem;">
+                <div id="modalIcon" class="agent-icon" style="margin-bottom: 0;"></div>
+                <div>
+                    <h3 id="modalTitle" style="font-size: 1.5rem;">Agent Details</h3>
+                    <div id="modalStatus" class="agent-status" style="position: static; display: inline-block;">Active</div>
+                </div>
+            </div>
+            
+            <h4 style="margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 1px; color: var(--text-dim);">LIVE EXECUTION LOG</h4>
+            <div id="modalLogs" style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; height: 200px; overflow-y: auto;">
+                <!-- Logs injected here -->
+            </div>
+            
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button class="btn-primary" style="flex: 1; font-size: 0.8rem;" onclick="closeModal()">Deploy Optimization</button>
+                <button class="btn-primary-outline" style="flex: 1; font-size: 0.8rem;" onclick="closeModal()">View Configuration</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Trigger animations
         setTimeout(() => {
             document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
         }, 100);
+
+        function showAgentDetails(title, icon, status) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalIcon').innerHTML = icon;
+            document.getElementById('modalStatus').innerText = status;
+            document.getElementById('modalStatus').className = 'agent-status ' + (status === 'Active' ? 'status-active' : 'status-learning');
+            
+            const logs = document.getElementById('modalLogs');
+            logs.innerHTML = '';
+            
+            const possibleLogs = [
+                "Analyzing stream data...",
+                "Optimizing vectors for engagement...",
+                "Updating internal model...",
+                "Synthesizing market response...",
+                "Deploying micro-adjustment...",
+                "Monitoring feedback loop..."
+            ];
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                const time = new Date().toLocaleTimeString();
+                entry.innerHTML = `<span>[${time}]</span> ${possibleLogs[Math.floor(Math.random() * possibleLogs.length)]}`;
+                logs.appendChild(entry);
+                logs.scrollTop = logs.scrollHeight;
+                i++;
+                if (i > 20) clearInterval(interval);
+            }, 800);
+            
+            document.getElementById('agentModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('agentModal').style.display = 'none';
+        }
+
+        // Attach click handlers
+        document.querySelectorAll('.agent-card').forEach(card => {
+            card.onclick = function() {
+                const title = this.querySelector('h3').innerText;
+                const icon = this.querySelector('.agent-icon').innerHTML;
+                const status = this.querySelector('.agent-status').innerText;
+                showAgentDetails(title, icon, status);
+            };
+        });
     </script>
 </body>
 </html>
