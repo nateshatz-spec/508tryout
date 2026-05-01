@@ -1,7 +1,0 @@
-{
-  "name": "508-tryout-static",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "mkdir -p dist && cp *.html *.css *.js package.json dist/ && cp -r assets dist/"
-  }
-}
