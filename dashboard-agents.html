@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Hub | 508 Consulting</title>
+    <title>AI Agent Hub | Shatzkamer Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="theme-switcher.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .dashboard-layout {
             display: grid;
@@ -46,12 +47,6 @@
             background: var(--bg-color);
             overflow-y: auto;
         }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-        }
         
         /* Agent Grid */
         .agent-grid {
@@ -67,92 +62,58 @@
             transition: var(--transition-base);
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .agent-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary-cyan);
             background: rgba(255, 255, 255, 0.05);
         }
-        .agent-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: rgba(0, 245, 255, 0.1);
-            color: var(--primary-cyan);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .agent-status {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-weight: 700;
-        }
-        .status-active { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        .status-learning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
         
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
+        /* Agent Detail View */
+        #agentDetailView {
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
         }
-        .modal-content {
-            background: var(--bg-secondary);
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        .detail-panel {
+            background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            width: 100%;
-            max-width: 600px;
-            padding: 2.5rem;
-            position: relative;
+            padding: 2rem;
         }
-        .close-modal {
-            position: absolute;
-            top: 1.5rem; right: 1.5rem;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-dim);
-        }
+        
         .log-entry {
             font-family: monospace;
             font-size: 0.8rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
             color: var(--text-dim);
             padding-left: 1rem;
             border-left: 2px solid var(--primary-cyan);
         }
         .log-entry span { color: var(--primary-cyan); margin-right: 8px; }
-
-        .agent-card { cursor: pointer; }
         
-        .agent-meta {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--glass-border);
+        .agent-icon-large {
+            width: 60px; height: 60px;
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--primary-cyan);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
         }
-        .meta-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.2rem; }
-        .meta-value { font-weight: 600; font-family: var(--font-heading); }
-        
+
         .pulse {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             border-radius: 50%;
             background: #10b981;
             margin-right: 6px;
@@ -170,7 +131,7 @@
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="logo sidebar-logo">508<span>.</span></a>
+            <a href="index.html" class="logo sidebar-logo">Shatzkamer<span>.</span></a>
             <nav class="sidebar-nav">
                 <a href="dashboard.html">Overview</a>
                 <a href="dashboard-agents.html" class="active">AI Agent Hub</a>
@@ -187,124 +148,101 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="top-bar fade-in-up">
-                <div>
-                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">AI Agent Hub</h2>
-                    <p style="color: var(--text-dim);">Orchestrating autonomous operations for your brand.</p>
+            <!-- Grid View -->
+            <div id="agentGridView">
+                <div class="top-bar fade-in-up">
+                    <div>
+                        <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">AI Agent Hub</h2>
+                        <p style="color: var(--text-dim);">Select an agent to view its dedicated performance dashboard.</p>
+                    </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="text-align: right;">
-                        <div style="font-size: 0.8rem; color: var(--text-dim);">SYSTEM STATUS</div>
-                        <div style="font-weight: 600; display: flex; align-items: center; justify-content: flex-end;"><span class="pulse"></span> OPTIMIZED</div>
+
+                <div class="agent-grid fade-in-up delay-1">
+                    <!-- Marketing Strategist -->
+                    <div class="agent-card" onclick="openAgentDashboard('Marketing Strategist', '&#x261b;', '94.2%', 'Autonomous planning to scale operations.')">
+                        <div class="agent-icon" style="font-size: 1.5rem; margin-bottom: 1rem;">&#x261b;</div>
+                        <h3>Marketing Strategist</h3>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Optimizing market positioning and operational scaling.</p>
+                        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--primary-cyan);">CLICK TO OPEN DASHBOARD &rarr;</div>
+                    </div>
+
+                    <!-- Ad Spend Optimizer -->
+                    <div class="agent-card" onclick="openAgentDashboard('Ad Spend Optimizer', '&#x26a1;', '88.7%', 'Real-time bidding across all digital channels.')">
+                        <div class="agent-icon" style="font-size: 1.5rem; margin-bottom: 1rem;">&#x26a1;</div>
+                        <h3>Ad Spend Optimizer</h3>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Bidding and budget allocation across Meta and Google.</p>
+                        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--primary-cyan);">CLICK TO OPEN DASHBOARD &rarr;</div>
+                    </div>
+
+                    <!-- Social Media Manager -->
+                    <div class="agent-card" onclick="openAgentDashboard('Social Media Manager', '&#x27a4;', '91.5%', 'Managing sentiment and content scheduling.')">
+                        <div class="agent-icon" style="font-size: 1.5rem; margin-bottom: 1rem;">&#x27a4;</div>
+                        <h3>Social Media Manager</h3>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Automating engagement and content distribution.</p>
+                        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--primary-cyan);">CLICK TO OPEN DASHBOARD &rarr;</div>
+                    </div>
+
+                    <!-- Lead Scout -->
+                    <div class="agent-card" onclick="openAgentDashboard('Lead Scout', '&#x2709;', '92.4%', 'Monitoring inboxes and scoring leads.')">
+                        <div class="agent-icon" style="font-size: 1.5rem; margin-bottom: 1rem;">&#x2709;</div>
+                        <h3>Lead Scout</h3>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Identifying and responding to high-value opportunities.</p>
+                        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--primary-cyan);">CLICK TO OPEN DASHBOARD &rarr;</div>
                     </div>
                 </div>
             </div>
 
-            <div class="agent-grid fade-in-up delay-1">
-                <!-- Marketing Strategist -->
-                <div class="agent-card">
-                    <div class="agent-status status-active">Active</div>
-                    <div class="agent-icon">&#x261b;</div>
-                    <h3>Marketing Strategist</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Autonomous planning to scale operations and optimize market positioning.</p>
-                    <div class="agent-meta">
+            <!-- Detail View -->
+            <div id="agentDetailView" class="fade-in">
+                <div class="detail-header">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <button onclick="closeAgentDashboard()" class="btn-primary-outline" style="padding: 0.5rem 1rem;">&larr; Back to Hub</button>
+                        <div class="agent-icon-large" id="detailIcon"></div>
                         <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">94.2%</div>
+                            <h2 id="detailTitle" style="font-size: 2rem;">Agent Name</h2>
+                            <div style="display: flex; align-items: center; font-size: 0.85rem; color: var(--text-dim); margin-top: 0.2rem;">
+                                <span class="pulse"></span> LIVE ORCHESTRATION ACTIVE
+                            </div>
                         </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">1,240</div>
-                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">EFFICIENCY SCORE</div>
+                        <div id="detailEfficiency" style="font-size: 2rem; font-weight: 800; color: var(--primary-cyan);">94.2%</div>
                     </div>
                 </div>
 
-                <!-- Ad Spend Optimizer -->
-                <div class="agent-card">
-                    <div class="agent-status status-learning">Learning</div>
-                    <div class="agent-icon">&#x26a1;</div>
-                    <h3>Ad Spend Optimizer</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Real-time bidding optimization across Meta, Google, and LinkedIn channels.</p>
-                    <div class="agent-meta">
-                        <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">88.7%</div>
+                <div class="detail-grid">
+                    <div class="detail-panel">
+                        <h3 style="margin-bottom: 1.5rem;">Performance Matrix</h3>
+                        <div style="height: 300px;">
+                            <canvas id="agentPerformanceChart"></canvas>
                         </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">852</div>
+                        <div style="margin-top: 2rem;">
+                            <h4>Core Description</h4>
+                            <p id="detailDescription" style="color: var(--text-dim); line-height: 1.6; margin-top: 0.5rem;"></p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Social Media Manager -->
-                <div class="agent-card">
-                    <div class="agent-status status-active">Active</div>
-                    <div class="agent-icon">&#x27a4;</div>
-                    <h3>Social Media Manager</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Managing engagement, sentiment analysis, and content scheduling.</p>
-                    <div class="agent-meta">
-                        <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">91.5%</div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="detail-panel">
+                            <h3>Live Execution Log</h3>
+                            <div id="detailLogs" style="height: 250px; overflow-y: auto; margin-top: 1.5rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px;">
+                                <!-- Logs -->
+                            </div>
                         </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">3,104</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SEO & Content Engine -->
-                <div class="agent-card">
-                    <div class="agent-status status-active">Active</div>
-                    <div class="agent-icon">&#x25c9;</div>
-                    <h3>SEO & Content Engine</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Generating high-intent articles and optimizing on-page performance.</p>
-                    <div class="agent-meta">
-                        <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">76.8%</div>
-                        </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">428</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Lead Scout -->
-                <div class="agent-card">
-                    <div class="agent-status status-active">Active</div>
-                    <div class="agent-icon">&#x2709;</div>
-                    <h3>Lead Scout</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Monitoring inboxes to identify, score, and draft responses for high-value leads.</p>
-                    <div class="agent-meta">
-                        <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">92.4%</div>
-                        </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">15,241</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Brand Guardian -->
-                <div class="agent-card">
-                    <div class="agent-status status-active">Active</div>
-                    <div class="agent-icon">&#x2721;</div>
-                    <h3>Brand Guardian</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 0.5rem;">Ensuring brand consistency and reputation across all digital touchpoints.</p>
-                    <div class="agent-meta">
-                        <div>
-                            <div class="meta-label">Efficiency</div>
-                            <div class="meta-value">99.1%</div>
-                        </div>
-                        <div>
-                            <div class="meta-label">Tasks Done</div>
-                            <div class="meta-value">12,040</div>
+                        <div class="detail-panel">
+                            <h3>Agent Control</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.9rem;">Autonomous Execution</span>
+                                    <span style="color: #10b981; font-weight: 600;">ON</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.9rem;">Priority Level</span>
+                                    <span style="color: var(--primary-cyan); font-weight: 600;">CRITICAL</span>
+                                </div>
+                                <button class="btn-primary" style="margin-top: 1rem; font-size: 0.8rem;">Force Optimization Cycle</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -312,82 +250,84 @@
         </main>
     </div>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="agentModal" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 2rem;">
-                <div id="modalIcon" class="agent-icon" style="margin-bottom: 0;"></div>
-                <div>
-                    <h3 id="modalTitle" style="font-size: 1.5rem;">Agent Details</h3>
-                    <div id="modalStatus" class="agent-status" style="position: static; display: inline-block;">Active</div>
-                </div>
-            </div>
-            
-            <h4 style="margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 1px; color: var(--text-dim);">LIVE EXECUTION LOG</h4>
-            <div id="modalLogs" style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; height: 200px; overflow-y: auto;">
-                <!-- Logs injected here -->
-            </div>
-            
-            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-                <button class="btn-primary" style="flex: 1; font-size: 0.8rem;" onclick="closeModal()">Deploy Optimization</button>
-                <button class="btn-primary-outline" style="flex: 1; font-size: 0.8rem;" onclick="closeModal()">View Configuration</button>
-            </div>
-        </div>
-    </div>
-
     <script>
+        let performanceChart = null;
+        let logInterval = null;
+
+        function openAgentDashboard(title, icon, efficiency, description) {
+            document.getElementById('agentGridView').style.display = 'none';
+            document.getElementById('agentDetailView').style.display = 'block';
+            
+            document.getElementById('detailTitle').innerText = title;
+            document.getElementById('detailIcon').innerHTML = icon;
+            document.getElementById('detailEfficiency').innerText = efficiency;
+            document.getElementById('detailDescription').innerText = description;
+            
+            initChart();
+            startLogs(title);
+        }
+
+        function closeAgentDashboard() {
+            document.getElementById('agentGridView').style.display = 'block';
+            document.getElementById('agentDetailView').style.display = 'none';
+            if (performanceChart) performanceChart.destroy();
+            if (logInterval) clearInterval(logInterval);
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('agentPerformanceChart').getContext('2d');
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+                    datasets: [{
+                        label: 'Efficiency',
+                        data: [85, 88, 92, 90, 94, 93],
+                        borderColor: '#00f5ff',
+                        backgroundColor: 'rgba(0, 245, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function startLogs(agent) {
+            const logBox = document.getElementById('detailLogs');
+            logBox.innerHTML = '';
+            
+            const logsByAgent = {
+                "Marketing Strategist": ["Analyzing market trends...", "Synthesizing positioning...", "Optimizing channel allocation..."],
+                "Ad Spend Optimizer": ["Bidding on keywords...", "Adjusting CPC...", "Detecting fraud patterns..."],
+                "Social Media Manager": ["Generating viral hooks...", "Scheduling posts...", "Analyzing sentiment..."],
+                "Lead Scout": ["Scoring inquiries...", "Drafting responses...", "Updating CRM tags..."]
+            };
+            
+            const agentLogs = logsByAgent[agent] || ["Processing...", "Optimizing..."];
+            
+            logInterval = setInterval(() => {
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                const time = new Date().toLocaleTimeString();
+                entry.innerHTML = `<span>[${time}]</span> ${agentLogs[Math.floor(Math.random() * agentLogs.length)]}`;
+                logBox.appendChild(entry);
+                logBox.scrollTop = logBox.scrollHeight;
+            }, 1000);
+        }
+
         // Trigger animations
         setTimeout(() => {
             document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
         }, 100);
-
-        function showAgentDetails(title, icon, status) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalIcon').innerHTML = icon;
-            document.getElementById('modalStatus').innerText = status;
-            document.getElementById('modalStatus').className = 'agent-status ' + (status === 'Active' ? 'status-active' : 'status-learning');
-            
-            const logs = document.getElementById('modalLogs');
-            logs.innerHTML = '';
-            
-            const possibleLogs = [
-                "Analyzing stream data...",
-                "Optimizing vectors for engagement...",
-                "Updating internal model...",
-                "Synthesizing market response...",
-                "Deploying micro-adjustment...",
-                "Monitoring feedback loop..."
-            ];
-            
-            let i = 0;
-            const interval = setInterval(() => {
-                const entry = document.createElement('div');
-                entry.className = 'log-entry';
-                const time = new Date().toLocaleTimeString();
-                entry.innerHTML = `<span>[${time}]</span> ${possibleLogs[Math.floor(Math.random() * possibleLogs.length)]}`;
-                logs.appendChild(entry);
-                logs.scrollTop = logs.scrollHeight;
-                i++;
-                if (i > 20) clearInterval(interval);
-            }, 800);
-            
-            document.getElementById('agentModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('agentModal').style.display = 'none';
-        }
-
-        // Attach click handlers
-        document.querySelectorAll('.agent-card').forEach(card => {
-            card.onclick = function() {
-                const title = this.querySelector('h3').innerText;
-                const icon = this.querySelector('.agent-icon').innerHTML;
-                const status = this.querySelector('.agent-status').innerText;
-                showAgentDetails(title, icon, status);
-            };
-        });
     </script>
 </body>
 </html>

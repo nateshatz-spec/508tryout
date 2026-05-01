@@ -1,0 +1,8 @@
+name = "shatzkamer-database"
+main = "server/index.js"
+compatibility_date = "2024-05-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "agency-portal-db"
+database_id = "9a7f130c-7793-44ce-bbd8-589e11325cc5"

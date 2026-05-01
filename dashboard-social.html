@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Manager | 508 Consulting</title>
+    <title>Social Manager | Shatzkamer Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="theme-switcher.js"></script>
@@ -83,14 +83,23 @@
 
         .social-metrics {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: stretch;
         }
         .metrics-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-container {
+            flex: 1;
+            position: relative;
+            min-height: 300px;
         }
     </style>
 </head>
@@ -98,7 +107,7 @@
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="logo sidebar-logo">508<span>.</span></a>
+            <a href="index.html" class="logo sidebar-logo">Shatzkamer<span>.</span></a>
             <nav class="sidebar-nav">
                 <a href="dashboard.html">Overview</a>
                 <a href="dashboard-agents.html">AI Agent Hub</a>
@@ -158,37 +167,59 @@
             <div class="social-metrics fade-in-up delay-2">
                 <div class="metrics-panel">
                     <h3 style="margin-bottom: 2rem;">Engagement Growth</h3>
-                    <canvas id="engagementChart" height="250"></canvas>
+                    <div class="chart-container">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
                 </div>
-                <div class="metrics-panel" style="display: flex; flex-direction: column; gap: 1.5rem;">
-                    <h3 style="margin-bottom: 0.5rem;">Top Performing Content</h3>
-                    
-                    <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
-                        <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #7000ff, #00f5ff); opacity: 0.5;"></div>
+                <div class="metrics-panel">
+                    <h3 style="margin-bottom: 1.5rem;">Top Performing Content</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; flex: 1;">
+                        <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
+                            <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
+                                <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #7000ff, #00f5ff); opacity: 0.5;"></div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.9rem;">Strategy First: Why SMBs...</div>
+                                <div style="font-size: 0.8rem; color: var(--text-dim);">Instagram &#x2022; 2 days ago</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--primary-cyan); font-weight: 700;">854</div>
+                                <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
+                            </div>
                         </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; font-size: 0.9rem;">Strategy First: Why SMBs...</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim);">Instagram &#x2022; 2 days ago</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="color: var(--primary-cyan); font-weight: 700;">854</div>
-                            <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
+
+                        <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
+                            <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
+                                <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00f5ff, #7000ff); opacity: 0.5;"></div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 0.9rem;">The Future of AI in...</div>
+                                <div style="font-size: 0.8rem; color: var(--text-dim);">LinkedIn &#x2022; 4 days ago</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: var(--primary-cyan); font-weight: 700;">642</div>
+                                <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <div style="padding: 1.2rem; background: rgba(255, 255, 255, 0.02); border-radius: 12px; border: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
-                        <div style="width: 60px; height: 60px; border-radius: 8px; background: #333; overflow: hidden;">
-                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #00f5ff, #7000ff); opacity: 0.5;"></div>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; font-size: 0.9rem;">The Future of AI in...</div>
-                            <div style="font-size: 0.8rem; color: var(--text-dim);">LinkedIn &#x2022; 4 days ago</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="color: var(--primary-cyan); font-weight: 700;">642</div>
-                            <div style="font-size: 0.7rem; color: var(--text-dim);">Engagements</div>
-                        </div>
+            <!-- Platform Health -->
+            <div class="fade-in-up delay-3" style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">Platform Health & Sentiment</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 16px;">
+                        <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.5rem;">Audience Sentiment</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">94% POSITIVE</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 16px;">
+                        <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.5rem;">Avg. Response Time</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-cyan);">14 MINUTES</div>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 16px;">
+                        <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 0.5rem;">Reach Efficiency</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: #f59e0b;">+22% GROWTH</div>
                     </div>
                 </div>
             </div>

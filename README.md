@@ -1,4 +1,4 @@
-# 508 Consulting | Premium Agency Portal
+# Shatzkamer Database | Premium Agency Portal
 
 A cinematic, high-performance "Showcase" dashboard designed to demonstrate the power of AI-driven business orchestration. This portal has been meticulously migrated from a legacy React environment to a fully static, standalone HTML5/CSS3/JS architecture to ensure maximum performance, zero external dependencies, and a "perfect" demo experience.
 
@@ -48,4 +48,4 @@ A cinematic, high-performance "Showcase" dashboard designed to demonstrate the p
 - `/ios-app/`: Standalone Xcode project and Swift source files.
 
 ---
-*Built for 508 Consulting by Antigravity.*
+*Built for Shatzkamer Database by Antigravity.*

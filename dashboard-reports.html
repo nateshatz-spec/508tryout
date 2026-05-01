@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Dashboard | 508 Consulting</title>
+    <title>Analytics & Reports | Shatzkamer Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- Chart.js for Analytics Visualization -->
+    <script src="theme-switcher.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .dashboard-layout {
@@ -47,78 +47,68 @@
             background: var(--bg-color);
             overflow-y: auto;
         }
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-        }
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .avatar {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: #fff;
-        }
         
-        /* Metrics Grid */
-        .metrics-grid {
+        .reports-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
-        .metric-card {
-            padding: 1.5rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-        }
-        .metric-title {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 800;
-            font-family: var(--font-heading);
-            margin-bottom: 0.5rem;
-        }
-        .metric-trend {
-            font-size: 0.85rem;
-        }
-        .trend-up { color: #10b981; }
-        .trend-down { color: #ef4444; }
         
-        /* Charts Area */
-        .charts-area {
+        .report-panel {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 24px;
             padding: 2rem;
+            display: flex;
+            flex-direction: column;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard-layout { grid-template-columns: 1fr; }
-            .sidebar { display: none; } /* In a real app, this would be a toggle menu */
-            .main-content { padding: 1.5rem; }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Table Style */
+        .data-table-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th {
+            text-align: left;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+        }
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
     </style>
-<script src="theme-switcher.js"></script></head>
+</head>
 <body>
     <div class="dashboard-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <a href="index.html" class="logo sidebar-logo">508<span>.</span></a>
+            <a href="index.html" class="logo sidebar-logo">Shatzkamer<span>.</span></a>
             <nav class="sidebar-nav">
                 <a href="dashboard.html">Overview</a>
                 <a href="dashboard-agents.html">AI Agent Hub</a>
@@ -136,39 +126,79 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="top-bar fade-in-up">
-                <h2>Analytics Reports</h2>
-                <div class="user-profile">
-                    <span>Welcome back, Client</span>
-                    <div class="avatar">C</div>
+                <div>
+                    <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Analytics Reports</h2>
+                    <p style="color: var(--text-dim);">Deep insights into your business performance and ROI.</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-primary-outline" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">Export PDF</button>
+                    <button class="btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">Live Sync</button>
                 </div>
             </div>
 
-            <div class="metrics-grid fade-in-up delay-1">
-                <div class="metric-card">
-                    <div class="metric-title">Total Leads</div>
-                    <div class="metric-value">342</div>
-                    <div class="metric-trend trend-up">&uarr; 12% vs last month</div>
+            <div class="reports-grid fade-in-up delay-1">
+                <div class="report-panel">
+                    <h3 style="margin-bottom: 1.5rem;">Revenue Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-title">Website Traffic</div>
-                    <div class="metric-value">12.5k</div>
-                    <div class="metric-trend trend-up">&uarr; 8.4% vs last month</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-title">Conversion Rate</div>
-                    <div class="metric-value">2.7%</div>
-                    <div class="metric-trend trend-up">&uarr; 0.3% vs last month</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-title">Cost per Lead</div>
-                    <div class="metric-value">$42.50</div>
-                    <div class="metric-trend trend-down">&darr; 5% vs last month</div>
+                <div class="report-panel">
+                    <h3 style="margin-bottom: 1.5rem;">Acquisition Channels</h3>
+                    <div class="chart-container">
+                        <canvas id="channelChart"></canvas>
+                    </div>
                 </div>
             </div>
 
-            <div class="charts-area fade-in-up delay-2">
-                <h3 style="margin-bottom: 1.5rem;">Traffic & Lead Growth (YTD)</h3>
-                <canvas id="growthChart" height="100"></canvas>
+            <div class="data-table-container fade-in-up delay-2">
+                <h3 style="margin-bottom: 1rem;">Campaign Performance Breakdown</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campaign Name</th>
+                            <th>Status</th>
+                            <th>Leads</th>
+                            <th>Conversion</th>
+                            <th>ROI</th>
+                            <th>Ad Spend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Q4 Strategy Push</td>
+                            <td><span class="status-pill" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">Active</span></td>
+                            <td>124</td>
+                            <td>4.2%</td>
+                            <td>3.5x</td>
+                            <td>$4,200</td>
+                        </tr>
+                        <tr>
+                            <td>SEO Pillar: AI Tech</td>
+                            <td><span class="status-pill" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">Active</span></td>
+                            <td>86</td>
+                            <td>2.8%</td>
+                            <td>8.2x</td>
+                            <td>$800</td>
+                        </tr>
+                        <tr>
+                            <td>LinkedIn Outreach B2B</td>
+                            <td><span class="status-pill" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">Paused</span></td>
+                            <td>42</td>
+                            <td>1.5%</td>
+                            <td>1.2x</td>
+                            <td>$2,100</td>
+                        </tr>
+                        <tr>
+                            <td>Retargeting: Meta</td>
+                            <td><span class="status-pill" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">Active</span></td>
+                            <td>210</td>
+                            <td>5.8%</td>
+                            <td>4.1x</td>
+                            <td>$1,500</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </main>
     </div>
@@ -179,55 +209,56 @@
             document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
         }, 100);
 
-        // Initialize Chart.js
-        const ctx = document.getElementById('growthChart').getContext('2d');
-        
-        // Define theme colors
-        const accentColor = '#0f96d8';
-        const secondaryColor = 'rgba(15, 150, 216, 0.2)';
-        const textColor = '#94A3B8';
-        const gridColor = 'rgba(255, 255, 255, 0.05)';
-
-        new Chart(ctx, {
+        // Revenue Chart (Line)
+        const revCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
                 datasets: [{
-                    label: 'Website Traffic',
-                    data: [4000, 5200, 5800, 7100, 8500, 9200, 11000, 12500],
-                    borderColor: accentColor,
-                    backgroundColor: secondaryColor,
-                    borderWidth: 3,
-                    pointBackgroundColor: accentColor,
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
+                    label: 'Revenue ($)',
+                    data: [12000, 15000, 14000, 19000, 24000, 32000],
+                    borderColor: '#00f5ff',
+                    backgroundColor: 'rgba(0, 245, 255, 0.1)',
                     fill: true,
                     tension: 0.4
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(5, 8, 17, 0.9)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 1,
-                        padding: 12
-                    }
-                },
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: gridColor, drawBorder: false },
-                        ticks: { color: textColor }
-                    },
-                    x: {
-                        grid: { display: false, drawBorder: false },
-                        ticks: { color: textColor }
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+
+        // Channel Chart (Doughnut)
+        const chanCtx = document.getElementById('channelChart').getContext('2d');
+        new Chart(chanCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['SEO', 'Meta Ads', 'LinkedIn', 'Referral'],
+                datasets: [{
+                    data: [40, 25, 20, 15],
+                    backgroundColor: [
+                        '#00f5ff',
+                        '#7000ff',
+                        '#10b981',
+                        '#f59e0b'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#94a3b8', font: { family: 'Inter' } }
                     }
                 }
             }
